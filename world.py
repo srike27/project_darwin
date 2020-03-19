@@ -36,7 +36,7 @@ def run_game():
             for j in range(population):
                 dist = np.sqrt((plants[i].x - animals[j].px)**2+(plants[i].y - animals[j].py)**2)
                 if dist <= (plants[i].size + animals[j].size):
-                    plants[i].eaten()
+                    plants[i].eaten(animals[j].erate)
                     animals[j].grow()
             pg.draw.circle(screen, (100,255,0),[int(round(plants[i].x)),int(round(plants[i].y))],int(plants[i].size),0)
         for i in range(population):
