@@ -9,12 +9,14 @@ class plant:
         self.y = y
         self.size = 1
         self.grate = grate
+        self.size_cap = 100
 
     def grow(self):
-        self.size *= 1 + self.grate
+        if self.size < self.size_cap:
+            self.size *= 1 + self.grate
 
-    def eaten(self):
-        self.size /= 1 + self.grate
+    def eaten(self,erate):
+        self.size /= 1 + erate
         if self.size < 1:
             self.__del__()
 
