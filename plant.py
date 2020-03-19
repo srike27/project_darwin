@@ -19,4 +19,4 @@ class plant:
             self.__del__()
 
     def __del__(self):
-        print("tree eaten")
+        print("plant eaten")

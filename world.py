@@ -44,13 +44,11 @@ def run_game():
             y = (animals[i].py)
             if (x>1920-animals[i].size or x<animals[i].size):
                 animals[i].velx = -int(0.5*animals[i].velx)
-                #animals[i].ax = -1*animals[i].ax
                 if(x>1920 -animals[i].size):
                     animals[i].px = 1920 - animals[i].size
                 else: animals[i].px = animals[i].size
             if (y>1080 -animals[i].size or y<animals[i].size):
                 animals[i].vely = -int(0.5*animals[i].vely)
-                #animals[i].ay =-1*animals[i].ay
                 if(y>1080-animals[i].size):
                     animals[i].py = 1080 -animals[i].size
                 else: animals[i].py = animals[i].size  
