@@ -1,11 +1,13 @@
 import sys
 import numpy as np
 import math
-import pygame as pg 
+import pygame as pg
+import timing as t 
 
 class animal:
 
-    def __init__(self,x,y):
+    def __init__(self,x,y,btime):
+        self.btime = btime
         self.size = np.random.uniform(low = 5.0,high = 50)
         self.size_norm = self.size/50.0
         self.size_cap = 50
@@ -21,6 +23,11 @@ class animal:
         self.hunger = np.random.uniform(low = 0.0, high = 1.0)
         self.brate = np.random.uniform(low = 0.0, high = 1.0)
         self.drate = np.random.uniform(low = 0.0, high = 1.0)
+        self.erate = self.size/200
+        self.dtime = int(3*self.drate/(self.metabolism)*1000)
+        a = t.timing(self.dtime,0,0)
+        self.dtime = self.btime + a
+        print(self.dtime.eons,self.dtime.days,self.dtime.ticks)
         self.normalize()
         self.stamina = 100.0
         self.px = x
@@ -30,6 +37,12 @@ class animal:
         self.ax = 0
         self.ay = 0
         self.vthresh = self.speed
+    
+    def __del__(self):
+        print("animal has died")
+    
+    def die(self):
+        self.__del__()
 
     def updatestate(self):
         self.erate = self.size/200
@@ -40,7 +53,6 @@ class animal:
         self.velx = self.velx + self.ax
         self.vely = self.vely + self.ay
         self.cspd =math.sqrt(self.velx*self.velx+self.vely*self.vely)
-        print(self.speed)
         if self.cspd > self.speed:
             self.velx = self.velx/self.cspd*self.speed
             self.vely = self.vely/self.cspd*self.speed
@@ -74,6 +86,3 @@ class animal:
         self.brate /= total
         self.drate /= total
         self.grate /= total
-
-
-    

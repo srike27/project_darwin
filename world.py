@@ -22,13 +22,13 @@ def run_game():
         plants.append(p.plant(int(xplist[i]),int(yplist[i]),0.01))
     clock = pg.time.Clock()
     pg.init()
-    screen = pg.display.set_mode((1920,1080))
-    pg.display.set_caption("first screen")
+    screen = pg.display.set_mode((1920,1080))  #comment out for fast sim
+    pg.display.set_caption("first screen")  #comment out for fast sim
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
-        screen.fill((0, 0, 0))
+        screen.fill((0, 0, 0))  #comment out for fast sim
         color = (255, 100, 0)
         for i in range(vegetation):
             plants[i].grow()
@@ -37,8 +37,9 @@ def run_game():
                 if dist <= (plants[i].size + animals[j].size):
                     plants[i].eaten(animals[j].erate)
                     animals[j].grow()
-            pg.draw.circle(screen, (100,255,0),[int(round(plants[i].x)),int(round(plants[i].y))],int(plants[i].size),0)
+            pg.draw.circle(screen, (100,255,0),[int(round(plants[i].x)),int(round(plants[i].y))],int(plants[i].size),0) #comment out for fast sim
         kill_plant_list = []
+        kill_animal_list = []
         for i in range(vegetation):
             if (plants[i].size < 1):
                 kill_plant_list.append(i)
@@ -47,6 +48,9 @@ def run_game():
         for i in range(population):
             x = (animals[i].px)
             y = (animals[i].py)
+            print(worldtime.ticks,worldtime.days,worldtime.eons)
+            if (worldtime > animals[i].dtime):
+                kill_animal_list.append(i)
             if (x>1920-animals[i].size or x<animals[i].size):
                 animals[i].velx = -int(0.5*animals[i].velx)
                 if(x>1920 -animals[i].size):
@@ -58,10 +62,12 @@ def run_game():
                     animals[i].py = 1080 -animals[i].size
                 else: animals[i].py = animals[i].size  
             animals[i].impulse(np.random.normal(0.0,0.1),np.random.normal(0.0,0.1))
-            pg.draw.circle(screen, color,[int(round(animals[i].px)),int(round(animals[i].py))],int(animals[i].size),0)
+            pg.draw.circle(screen, color,[int(round(animals[i].px)),int(round(animals[i].py))],int(animals[i].size),0)  #comment out for fast sim
+        for anml in kill_animal_list:
+            animals.pop(anml)
         vegetation = len(plants)
         population = len(animals)
-        pg.display.flip()
+        pg.display.flip()  #comment out for fast sim
         worldtime.next()
         clock.tick(30)
 
