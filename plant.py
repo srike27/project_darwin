@@ -18,7 +18,8 @@ class plant:
     def eaten(self,erate):
         self.size /= 1 + erate
         if self.size < 1:
-            self.__del__()
+            self.__delete__()
 
-    def __del__(self):
-        print("plant eaten")
+    def __delete__(self):
+        print('plant dead')
+        del self

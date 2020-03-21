@@ -3,23 +3,23 @@ import pygame as pg
 import animal as a
 import plant as p
 import numpy as np
+import timing as t
 
 
 def run_game():
-    population = 10
+    worldtime = t.timing(ticks = 0,days = 0,eons = 0)
+    population = 100
     vegetation = 10
     xlist = np.random.uniform(0,1920,population)
     ylist = np.random.uniform(0,1080,population)
-    xplist = np.random.uniform(0,1920,population)
-    yplist = np.random.uniform(0,1080,population)
+    xplist = np.random.uniform(0,1920,vegetation)
+    yplist = np.random.uniform(0,1080,vegetation)
     animals = []
     plants = []
     for i in range(population):
-        animals.append(a.animal(int(xlist[i]),int(ylist[i])))
+        animals.append(a.animal(int(xlist[i]),int(ylist[i]),worldtime))
     for i in range(vegetation):
         plants.append(p.plant(int(xplist[i]),int(yplist[i]),0.01))
-    done = False
-    is_blue = False
     clock = pg.time.Clock()
     pg.init()
     screen = pg.display.set_mode((1920,1080))
@@ -29,8 +29,7 @@ def run_game():
             if event.type == pg.QUIT:
                 sys.exit()
         screen.fill((0, 0, 0))
-        if is_blue: color = (0, 128, 255)
-        else: color = (255, 100, 0)
+        color = (255, 100, 0)
         for i in range(vegetation):
             plants[i].grow()
             for j in range(population):
@@ -39,6 +38,12 @@ def run_game():
                     plants[i].eaten(animals[j].erate)
                     animals[j].grow()
             pg.draw.circle(screen, (100,255,0),[int(round(plants[i].x)),int(round(plants[i].y))],int(plants[i].size),0)
+        kill_plant_list = []
+        for i in range(vegetation):
+            if (plants[i].size < 1):
+                kill_plant_list.append(i)
+        for plnt in kill_plant_list:
+            plants.pop(plnt)
         for i in range(population):
             x = (animals[i].px)
             y = (animals[i].py)
@@ -54,7 +59,10 @@ def run_game():
                 else: animals[i].py = animals[i].size  
             animals[i].impulse(np.random.normal(0.0,0.1),np.random.normal(0.0,0.1))
             pg.draw.circle(screen, color,[int(round(animals[i].px)),int(round(animals[i].py))],int(animals[i].size),0)
+        vegetation = len(plants)
+        population = len(animals)
         pg.display.flip()
+        worldtime.next()
         clock.tick(30)
 
 run_game()
