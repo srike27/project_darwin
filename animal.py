@@ -6,23 +6,40 @@ import timing as t
 
 class animal:
 
-    def __init__(self,x,y,btime):
+    def __init__(self,x,y,btime,parent = None):
         self.btime = btime
-        self.size = np.random.uniform(low = 5.0,high = 50)
-        self.size_norm = self.size/50.0
-        self.size_cap = 50
-        self.speed = np.random.uniform(low = 0.0, high = 10.0)
-        self.speed_norm = self.speed/10.0
-        self.attack = np.random.uniform(low =0.0,high = 1.0)
-        self.stamina_cap = np.random.uniform(low = 0.0, high = 1.0)
-        self.aggressiveness = np.random.uniform(low = 0.0, high = 1.0)
-        self.metabolism = np.random.uniform(low = 0.0, high = 1.0)
-        self.sight = np.random.uniform(low = 0.0, high = 200.0)
-        self.sight_norm = self.sight/200.0
-        self.grate = np.random.uniform(low = 0.0, high = 1.0)
-        self.hunger = np.random.uniform(low = 0.0, high = 1.0)
-        self.brate = np.random.uniform(low = 0.0, high = 1.0)
-        self.drate = np.random.uniform(low = 0.0, high = 1.0)
+        if parent == None:
+            self.size = np.random.uniform(low = 5.0,high = 50)
+            self.size_norm = self.size/50.0
+            self.size_cap = 50
+            self.speed = np.random.uniform(low = 0.0, high = 10.0)
+            self.speed_norm = self.speed/10.0
+            self.attack = np.random.uniform(low =0.0,high = 1.0)
+            self.stamina_cap = np.random.uniform(low = 0.0, high = 1.0)
+            self.aggressiveness = np.random.uniform(low = 0.0, high = 1.0)
+            self.metabolism = np.random.uniform(low = 0.0, high = 1.0)
+            self.sight = np.random.uniform(low = 0.0, high = 200.0)
+            self.sight_norm = self.sight/200.0
+            self.grate = np.random.uniform(low = 0.0, high = 1.0)
+            self.hunger = np.random.uniform(low = 0.0, high = 1.0)
+            self.brate = np.random.uniform(low = 0.0, high = 1.0)
+            self.drate = np.random.uniform(low = 0.0, high = 1.0)
+        else:
+            self.size = parent.size + np.random.normal(0.0,0.1)
+            self.size_norm = self.size/50.0
+            self.size_cap = 50
+            self.speed = parent.speed + np.random.normal(0.0,0.1)
+            self.speed_norm = self.speed/10.0
+            self.attack = parent.attack + np.random.normal(0.0,0.1)
+            self.stamina_cap = parent.stamina_cap + np.random.normal(0.0,0.1)
+            self.aggressiveness = parent.aggressiveness + np.random.normal(0.0,0.1)
+            self.metabolism = parent.metabolism + np.random.normal(0.0,0.1)
+            self.sight = parent.sight + np.random.normal(0.0,0.1)
+            self.sight_norm = self.sight/200.0
+            self.grate = parent.grate + np.random.normal(0.0,0.1)
+            self.hunger = parent.hunger + np.random.normal(0.0,0.1)
+            self.brate = parent.brate + np.random.normal(0.0,0.1)
+            self.drate = parent.drate + np.random.normal(0.0,0.1)
         self.erate = self.size/200
         self.dtime = int(3*self.drate/(self.metabolism)*1000)
         a = t.timing(self.dtime,0,0)

@@ -8,7 +8,7 @@ import timing as t
 
 def run_game():
     worldtime = t.timing(ticks = 0,days = 0,eons = 0)
-    population = 100
+    population = 10
     vegetation = 10
     xlist = np.random.uniform(0,1920,population)
     ylist = np.random.uniform(0,1080,population)
@@ -48,7 +48,6 @@ def run_game():
         for i in range(population):
             x = (animals[i].px)
             y = (animals[i].py)
-            print(worldtime.ticks,worldtime.days,worldtime.eons)
             if (worldtime > animals[i].dtime):
                 kill_animal_list.append(i)
             if (x>1920-animals[i].size or x<animals[i].size):
@@ -61,6 +60,7 @@ def run_game():
                 if(y>1080-animals[i].size):
                     animals[i].py = 1080 -animals[i].size
                 else: animals[i].py = animals[i].size  
+            #animals do something here for now random motion
             animals[i].impulse(np.random.normal(0.0,0.1),np.random.normal(0.0,0.1))
             pg.draw.circle(screen, color,[int(round(animals[i].px)),int(round(animals[i].py))],int(animals[i].size),0)  #comment out for fast sim
         for anml in kill_animal_list:
@@ -69,6 +69,6 @@ def run_game():
         population = len(animals)
         pg.display.flip()  #comment out for fast sim
         worldtime.next()
-        clock.tick(30)
+        clock.tick(300)
 
 run_game()
