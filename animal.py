@@ -41,12 +41,13 @@ class animal:
             self.brate = parent.brate + np.random.normal(0.0,0.1)
             self.drate = parent.drate + np.random.normal(0.0,0.1)
         self.erate = self.size/200
+        self.stamina = self.stamina_cap * 5
         self.dtime = int(3*self.drate/(self.metabolism)*1000)
+        self.action_time = t.timing(int(50*self.stamina/self.metabolism),0,0)
         a = t.timing(self.dtime,0,0)
         self.dtime = self.btime + a
-        print(self.dtime.eons,self.dtime.days,self.dtime.ticks)
+        #print(self.dtime.eons,self.dtime.days,self.dtime.ticks)
         self.normalize()
-        self.stamina = 100.0
         self.px = x
         self.py = y
         self.velx = 0
@@ -65,15 +66,20 @@ class animal:
         self.erate = self.size/200
         tmvx = self.velx
         tmvy = self.vely
-        self.px+=self.velx
-        self.py+=self.vely
-        self.velx = self.velx + self.ax
-        self.vely = self.vely + self.ay
+        self.px += self.velx
+        self.py += self.vely
+        self.velx = self.stamina * (self.velx + self.ax)
+        self.vely = self.stamina * (self.vely + self.ay)
         self.cspd =math.sqrt(self.velx*self.velx+self.vely*self.vely)
         if self.cspd > self.speed:
             self.velx = self.velx/self.cspd*self.speed
             self.vely = self.vely/self.cspd*self.speed
-        self.stamina -= (self.metabolism)*(self.cspd)
+        if self.cspd > 1:
+            self.stamina /= 1.001
+        if self.cspd <= 1:
+            self.stamina *= 1.001
+            if self.stamina > self.stamina_cap*5:
+                self.stamina = self.stamina_cap*5
         if self.ax==0:
             self.velx = tmvx
         if self.ay==0:
