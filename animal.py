@@ -45,6 +45,8 @@ class animal:
         self.stamina = self.stamina_cap * 5
         self.dtime = int(self.drate/(self.metabolism)*1000)
         self.action_time = int(50*self.stamina/self.metabolism)
+        if self.action_time < 200:
+            self.action_time = 200
         a = t.timing(self.dtime,0,0)
         self.dtime = self.btime + a
         self.counter = 0
