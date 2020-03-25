@@ -28,6 +28,16 @@ class timing:
         out = timing(ticks= ticks,days = days,eons = eons)
         return out
 
+    def __sub__(self,a):
+        num = self.ticks + 1000*self.days + 1000*1000*self.eons
+        num2= a.ticks + a.days*1000 + self.eons*1000*1000
+        nf = num - num2
+        eons = nf//(1000*1000)
+        days = nf//(1000) - 1000*eons
+        ticks = nf - 1000*days - 1000*1000*eons
+        out = timing(ticks= ticks,days = days,eons = eons)
+        return out
+
     def __gt__(self,other):
         num1 = self.ticks + self.days*1000 + self.eons*1000*1000
         num2 = other.ticks + other.days*1000 + other.eons*1000*1000
