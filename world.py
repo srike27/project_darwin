@@ -8,7 +8,7 @@ import timing as t
 
 def run_game():
     worldtime = t.timing(ticks = 0,days = 0,eons = 0)
-    population = 10
+    population = 100
     vegetation = 10
     xlist = np.random.uniform(0,1920,population)
     ylist = np.random.uniform(0,1080,population)
@@ -45,11 +45,11 @@ def run_game():
                 kill_plant_list.append(i)
         for plnt in kill_plant_list:
             plants.pop(plnt)
+        newanimlist = [] 
         for i in range(population):
+            print(animals[i].dtime.days)
             x = (animals[i].px)
             y = (animals[i].py)
-            if (worldtime > animals[i].dtime):
-                kill_animal_list.append(i)
             if (x>1920-animals[i].size or x<animals[i].size):
                 animals[i].velx = -int(0.5*animals[i].velx)
                 if(x>1920 -animals[i].size):
@@ -61,14 +61,20 @@ def run_game():
                     animals[i].py = 1080 -animals[i].size
                 else: animals[i].py = animals[i].size  
             #animals do something here for now random motion
+            newanim = animals[i].animal_action(worldtime)
+            if newanim is not None:
+                newanimlist.append(newanim)
             animals[i].impulse(np.random.normal(0.0,0.1),np.random.normal(0.0,0.1))
+            if (worldtime > animals[i].dtime):
+                kill_animal_list.append(i)
             pg.draw.circle(screen, color,[int(round(animals[i].px)),int(round(animals[i].py))],int(animals[i].size),0)  #comment out for fast sim
+        animals = animals + newanimlist
         for anml in kill_animal_list:
             animals.pop(anml)
         vegetation = len(plants)
         population = len(animals)
         pg.display.flip()  #comment out for fast sim
         worldtime.next()
-        clock.tick(300)
+        clock.tick(30)
 
 run_game()
