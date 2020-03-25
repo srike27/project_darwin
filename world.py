@@ -8,7 +8,7 @@ import timing as t
 
 def run_game():
     worldtime = t.timing(ticks = 0,days = 0,eons = 0)
-    population = 100
+    population = 10
     vegetation = 10
     xlist = np.random.uniform(0,1920,population)
     ylist = np.random.uniform(0,1080,population)
@@ -47,7 +47,6 @@ def run_game():
             plants.pop(plnt)
         newanimlist = [] 
         for i in range(population):
-            print(animals[i].dtime.days)
             x = (animals[i].px)
             y = (animals[i].py)
             if (x>1920-animals[i].size or x<animals[i].size):
