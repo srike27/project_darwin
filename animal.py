@@ -45,8 +45,9 @@ class animal:
         self.stamina = self.stamina_cap * 5
         self.dtime = int(self.drate/(self.metabolism)*1000)
         self.action_time = int(50*self.stamina/self.metabolism)
-        if self.action_time < 200:
-            self.action_time = 200
+        self.fat = 0.5
+        if self.action_time < 50:
+            self.action_time = 50
         a = t.timing(self.dtime,0,0)
         self.dtime = self.btime + a
         self.counter = 0
@@ -64,6 +65,7 @@ class animal:
         angle = np.random.uniform(low = 0.0,high = 2 * np.pi)
         nx = self.px + 2*self.size*np.cos(angle)
         ny = self.py + 2*self.size*np.cos(angle)
+        self.fat /= 1.5
         return animal(nx,ny,wtime,self)
 
     def animal_action(self,wtime):
@@ -86,6 +88,7 @@ class animal:
 
     def updatestate(self):
         self.erate = self.size/200
+        self.fat /= 1.01
         tmvx = self.velx
         tmvy = self.vely
         self.px += self.velx
@@ -93,6 +96,8 @@ class animal:
         self.velx = self.stamina * (self.velx + self.ax)
         self.vely = self.stamina * (self.vely + self.ay)
         self.cspd =math.sqrt(self.velx*self.velx+self.vely*self.vely)
+        if self.fat < 0.1:
+            self.dtime = self.dtime - t.timing(ticks = 10,days = 0,eons = 0)
         if self.cspd > self.speed:
             self.velx = self.velx/self.cspd*self.speed
             self.vely = self.vely/self.cspd*self.speed
@@ -119,6 +124,9 @@ class animal:
 
     def grow(self):
         if self.size <= self.size_cap:
+            self.fat *= 1.1
+            if self.fat > 1:
+                self.fat = 1
             self.size *= 1 + (1-self.metabolism)*(self.grate)/100
 
     def normalize(self):
