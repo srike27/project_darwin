@@ -3,6 +3,7 @@ import numpy as np
 import math
 import pygame as pg
 import timing as t 
+import roulette as r
 
 class animal:
 
@@ -42,10 +43,11 @@ class animal:
             self.drate = parent.drate + np.random.normal(0.0,0.1)
         self.erate = self.size/200
         self.stamina = self.stamina_cap * 5
-        self.dtime = int(3*self.drate/(self.metabolism)*1000)
-        self.action_time = t.timing(int(50*self.stamina/self.metabolism),0,0)
+        self.dtime = int(self.drate/(self.metabolism)*1000)
+        self.action_time = int(50*self.stamina/self.metabolism)
         a = t.timing(self.dtime,0,0)
         self.dtime = self.btime + a
+        self.counter = 0
         #print(self.dtime.eons,self.dtime.days,self.dtime.ticks)
         self.normalize()
         self.px = x
@@ -54,13 +56,31 @@ class animal:
         self.vely = 0
         self.ax = 0
         self.ay = 0
-        self.vthresh = self.speed
+        self.wheel = r.roulette(self)
+
+    def reproduce(self,wtime):
+        angle = np.random.uniform(low = 0.0,high = 2 * np.pi)
+        nx = self.px + 2*self.size*np.cos(angle)
+        ny = self.py + 2*self.size*np.cos(angle)
+        return animal(nx,ny,wtime,self)
+
+    def animal_action(self,wtime):
+        self.wheel.update_roulette(self)
+        if self.counter == 0:
+            self.decision = self.wheel.spin_roulette()
+        if self.decision == 0:
+            if self.counter == self.action_time - 1:
+                print("!!!!!!!!!!!!!!!!ANIMAL BORN YEAAAAAAAAH!!!!!!!!!!!")
+                return self.reproduce(wtime)
+        if self.decision == 1:
+            return None
+        if self.decision == 2:
+            return None
+        if self.decision == 3:
+            return None
     
     def __del__(self):
         print("animal has died")
-    
-    def die(self):
-        self.__del__()
 
     def updatestate(self):
         self.erate = self.size/200
@@ -84,6 +104,9 @@ class animal:
             self.velx = tmvx
         if self.ay==0:
             self.vely = tmvy
+        self.counter += 1
+        if self.counter == self.action_time:
+            self.counter = 0 
 
     def impulse(self,acx,acy):
         self.ax = acx
